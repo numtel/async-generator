@@ -5,8 +5,7 @@
 function delay(time) {
   return new Promise((resolve, reject) => {
     setTimeout(function() {
-      console.log('Slept for ' + time)
-      resolve()
+      resolve({ someKey: 'someVal' })
     }, time)
   })
 }
@@ -49,9 +48,15 @@ function async(generatorFunction) {
 function longTask() {
   return async(function*(resume) {
     console.log('getting started')
-    yield delay(100).then(resume)
+
+    // Get the return value
+    console.log((yield delay(100).then(resume)).someKey)
+
     console.log('half-way')
+
+    // Wait without checking the return value
     yield delay(220).then(resume)
+
     console.log('all-done')
     return 42
   })
